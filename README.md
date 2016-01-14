@@ -32,14 +32,14 @@ Before run it you need to install and run [Redis Server](http://redis.io/topics/
 You might see from logs that the default port is `8081`, you can change it in the properties file.
 
 ### Get started faster
-For those that want see things right away without read the API use the `--seed` command tool with [cloud-status-seed.json]() file that comes with the project.
+For those that want see things right away without read the API use the `--seed` command tool with `cloud-status-seed.json` file that comes with the project.
 
 	java -jar cloud-status-0.5.0.jar --seed cloud-status-seed.json
 
 It will populate some date to be used
 
 ### Demo UI
-I've written a basic UI that uses [Backbone.js](http://backbonejs.org/) to list services, events and their statuses in a shot. After you get the server running at port `8081`, you can just open [demo-index.html]() in your browser to see the demo.
+I've written a basic UI that uses [Backbone.js](http://backbonejs.org/) to list services, events and their statuses in a shot. After you get the server running at port `8081`, you can just open `demo-index.html` in your browser to see the demo.
 
 ![ui-demo](http://d.pr/i/1cL6u+)
 Where
