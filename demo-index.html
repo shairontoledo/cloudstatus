@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Cloud Status API - Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"> <a href="#">Recent Incidents</a></li>
+            <li role="presentation" class="active"><a href="#">Services</a></li>
+            <li role="presentation"><a href="#">Maintenance Window</a></li>
+            <li role="presentation"><a href="#">Calendar</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Cloud Status</h3>
+      </div>
+      <div class="jumbotron">
+        <h2>Things are good for now</h2>
+        <p class="lead">No incident for last 24hs</p>
+      </div>
+      <div id="main-container">
+      </div>
+
+      <script id="serviceTemplate" type="text/html">
+        <h1 id="<%= id.split(':')[1] %>" class="page-header">
+          <a class="anchorjs-link " href="#service"></a>
+          <span><%= name %>
+          </h1>
+          <div class="list-group" id="events_<%= id.split(':')[1] %>">
+          </div>
+        </script>
+
+        <script id="eventTemplate" type="text/html">
+          <a href="#" id="<%= id.split(':')[1] %>" class="list-group-item">
+            <% labels = {
+              "Critical": "warning",
+              "Partial Service Disruption": "warning",
+              "Service Outage": "danger"
+            }
+            %>
+            <h4 class="list-group-item-heading"><%= name %> </h4>
+            <p class="list-group-item-text">
+              <span class="label label-<%= labels[severity] %>"><%= severity %> </span>  &nbsp; - <%= new Date(when) %>
+              <br/>
+              <br/>
+            </p>
+            <div class="list-group" id="statuses_<%= id.split(':')[1] %>"></div>
+          </a>
+        </script>
+
+        <script id="statusTemplate" type="text/html">
+          <% labels = {
+            "yellow": "warning",
+            "green": "success",
+            "red": "danger"
+          }
+          %>
+          <div class="panel panel-<%= labels[type] %>">
+            <div class="panel-heading">
+              <h3 class="panel-title"><%= new Date(when) %></h3>
+            </div> <div class="panel-body"><%= message %> </div>
+          </div>
+        </script>
+
+        <footer class="footer">
+          <p></p>
+        </footer>
+      </div>
+
+      <script>
+      var ServerUrl = "http://127.0.0.1:8081"
+      var Service = Backbone.Model.extend({
+        urlRoot: ServerUrl + "/services"
+      });
+
+      var Event = Backbone.Model.extend({
+        url: function () {
+          return  ServerUrl + "/services/"+get('service_id')+"/events/"+get('id');
+        }
+      });
+
+      var Status = Backbone.Model.extend({});
+
+      var Services = Backbone.Collection.extend({
+        model: Service,
+        url: function () {
+          return ServerUrl + "/services";
+        }
+      });
+
+      var Events = Backbone.Collection.extend({
+        model: Event,
+        initialize: function(models, params){
+          this.url = ServerUrl + "/services/"+params.service_id+"/events"
+        }
+      });
+
+      var Statuses = Backbone.Collection.extend({
+        model: Status,
+        initialize: function(models, params){
+          this.url = ServerUrl + "/services/"+params.service_id+"/events/"+params.event_id+"/statuses"
+        }
+      });
+
+      var ServiceView = Backbone.View.extend({
+        render: function() {
+          var template = _.template($("#serviceTemplate").html());
+          var html = template(this.model.toJSON());
+          this.$el.html(html);
+
+          return this;
+        }
+      });
+
+      var EventView = Backbone.View.extend({
+        render: function() {
+          var template = _.template($("#eventTemplate").html());
+          var html = template(this.model.toJSON());
+          this.$el.html(html);
+
+          return this;
+        }
+      });
+
+      var StatusView = Backbone.View.extend({
+        render: function() {
+          var template = _.template($("#statusTemplate").html());
+          var html = template(this.model.toJSON());
+          this.$el.html(html);
+
+          return this;
+        }
+      });
+
+      var EventsView = Backbone.View.extend({
+        render: function() {
+          var self = this;
+          this.model.each(function(event) {
+            var eventView = new EventView({model: event });
+            self.$el.append(eventView.render().$el);
+          });
+          return this;
+        }
+      });
+
+      var StatusesView = Backbone.View.extend({
+        render: function() {
+          var self = this;
+          this.model.each(function(status) {
+            var statusView = new StatusView({model: status });
+            self.$el.append(statusView.render().$el);
+          });
+          return this;
+        }
+      });
+
+      var ServicesView = Backbone.View.extend({
+        render: function() {
+          var self = this;
+          this.model.each(function(service) {
+            var serviceView = new ServiceView({model: service });
+            self.$el.append(serviceView.render().$el);
+          });
+          return this;
+        }
+      });
+
+      var services = new Services();
+      services.fetch({async: false});
+
+      var s = new ServicesView({el: "#main-container", model: services})
+      s.render();
+      var service;
+
+      services.each(function (service, index) {
+
+        var events = new Events([], {service_id: service.id});
+        events.fetch({async: false});
+
+        var servicesListDomId = "#events_"+service.id.split(':')[1];
+        if (events.length > 0){
+          var eventsView = new EventsView({el: servicesListDomId, model: events});
+          eventsView.render();
+
+          events.each(function(event) {
+            var statusesListDomId = "#statuses_"+event.id.split(':')[1];
+            var statuses = new Statuses([], {service_id: service.id, event_id: event.id});
+            statuses.fetch({async: false});
+            var statusesView = new StatusesView({el: statusesListDomId, model: statuses });
+            statusesView.render();
+          });
+        }
+      })
+      </script>
+    </body>
+</html>

@@ -1,0 +1,176 @@
+{
+  "tokens": {
+    "demo": "token1"
+  },
+  "services": [
+    {
+      "name": "Authentication and Authorization",
+      "events": [
+        {
+          "name": "Some users are experiencing issues to access our service",
+          "when": "2016-01-10T15:06:07Z",
+          "severity": "Partial Service Disruption",
+          "statuses": [
+            {
+              "when": "2016-01-10T15:09:07Z",
+              "message": "This issue has now been resolved. We are sorry for any inconvenience.",
+              "type": "green"
+            },
+            {
+              "when": "2016-01-10T15:08:07Z",
+              "message": "The source of the issue has been identified, we're working on a fix.",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-10T15:07:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "yellow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Facebook Integration",
+      "events": [
+        {
+          "name": "Problem to login via Facebook ",
+          "when": "2016-01-11T15:06:07Z",
+          "severity": "Partial Service Disruption",
+          "statuses": [
+            {
+              "when": "2016-01-11T15:09:07Z",
+              "message": "Facebook status page reports status ok now.",
+              "type": "green"
+            },
+            {
+              "when": "2016-01-11T15:07:07Z",
+              "message": "Facebook status page is reporting they are under DDoS attach.",
+              "type": "yellow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Uploading media issue",
+      "events": [
+        {
+          "name": "Some users cannot upload files",
+          "when": "2016-01-13T09:06:07Z",
+          "severity": "Partial Service Disruption",
+          "statuses": [
+            {
+              "when": "2016-01-13T11:00:07Z",
+              "message": "Uploading issue has now been resolved. We are sorry for any inconvenience.",
+              "type": "green"
+            },
+            {
+              "when": "2016-01-13T09:49:07Z",
+              "message": "We got a definitive fix for the issue however will take ~ 2 hours to recover all affected users",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-13T09:38:07Z",
+              "message": "Most of users can upload now but the issue still happening for others.",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-13T09:37:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "yellow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API and Webapp",
+      "events": [
+        {
+          "name": "Slow network services in the private Cloud",
+          "when": "2016-01-13T22:06:07Z",
+          "severity": "Critical",
+          "statuses": [
+            {
+              "when": "2016-01-13T22:38:07Z",
+              "message": "Everything is good now",
+              "type": "green"
+            },
+            {
+              "when": "2016-01-13T22:38:07Z",
+              "message": "System recovering.",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-13T22:37:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "yellow"
+            }
+          ]
+        },
+        {
+          "name": "Slow network services in the private Cloud",
+          "when": "2016-01-14T22:06:07Z",
+          "severity": "Critical",
+          "statuses": [
+            {
+              "when": "2016-01-14T22:38:07Z",
+              "message": "System recovering.",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-14T22:37:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "yellow"
+            }
+          ]
+        },
+        {
+          "name": "Unusual API traffic",
+          "when": "2016-01-18T17:06:07Z",
+          "severity": "Critical",
+          "statuses": [
+            {
+              "when": "2016-01-18T17:40:07Z",
+              "message": "All good with API.",
+              "type": "green"
+            },
+            {
+              "when": "2016-01-18T17:38:07Z",
+              "message": "We're scaling up API service",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-18T17:37:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "yellow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Message Broker Disruption",
+      "events": [
+        {
+          "name": "Messages cannot be dispatched among the internal services",
+          "when": "2016-01-20T15:06:07Z",
+          "severity": "Service Outage",
+          "statuses": [
+            {
+              "when": "2016-01-13T09:38:07Z",
+              "message": "System Recovering",
+              "type": "yellow"
+            },
+            {
+              "when": "2016-01-13T09:37:07Z",
+              "message": "Our awesome DevOps team is investigation the issue.",
+              "type": "red"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

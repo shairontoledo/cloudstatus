@@ -1,0 +1,59 @@
+group 'github.shairontoledo'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE")
+    }
+}
+
+jar {
+    baseName = 'cloud-status'
+    version =  '0.5.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.data:spring-data-redis")
+    compile('org.apache.commons:commons-pool2:2.4.2')
+    compile('redis.clients:jedis:2.8.0')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("com.beust:jcommander:1.48")
+
+    testCompile('org.mockito:mockito-all:1.10.19')
+    testCompile('org.assertj:assertj-core:3.2.0')
+    testCompile('junit:junit')
+    testCompile('org.springframework.boot:spring-boot-starter-test:1.3.0.RELEASE')
+    testCompile('net.javacrumbs.json-unit:json-unit-spring:1.7.0')
+    testCompile('net.javacrumbs.json-unit:json-unit-fluent:1.7.0')
+    testCompile('com.jayway.restassured:rest-assured:2.7.0')
+    testCompile('com.jayway.restassured:spring-mock-mvc:2.7.0')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+springBoot {
+    mainClass = "github.shairontoledo.cloudstatus.Application"
+}
+
+test.testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+}
